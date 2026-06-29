@@ -1,0 +1,37 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Session {
+  id            String   @id @default(cuid())
+  phoneNumber   String   @unique
+  stringSession String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ScrapeJob {
+  id           String   @id @default(cuid())
+  targetId     String   // Chat ID, Username ou Link
+  status       String   @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  filters      String?  // JSON string
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  extractedData ExtractedData[]
+}
+
+model ExtractedData {
+  id           String   @id @default(cuid())
+  jobId        String
+  job          ScrapeJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  messageId    Int
+  content      String?
+  link         String?
+  extractedAt  DateTime @default(now())
+}
