@@ -18,14 +18,14 @@ export default function Dashboard() {
 
   const fetchJobs = async () => {
     const res = await getJobs();
-    if (res.success) {
+    if (res.success && res.jobs) {
       setJobs(res.jobs);
     }
   };
 
   const fetchExtractedData = async (jobId: string) => {
     const res = await getExtractedData(jobId);
-    if (res.success) {
+    if (res.success && res.data) {
       setExtractedData(res.data);
     }
   };
